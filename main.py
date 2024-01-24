@@ -20,7 +20,7 @@ class GraphicsEngine:
 
 		# mouse settings
 		pg.event.set_grab(True)
-		pg.mouse.set_visible(False)
+		pg.mouse.set_visible(True)
 
 		# detect and use existing opengl context.
 		self.ctx = mgl.create_context()
@@ -61,6 +61,7 @@ class GraphicsEngine:
 		while True:
 			self.get_time()
 			self.check_events()
+			self.camera.update()
 			self.render()
 			self.delta_time = self.clock.tick(60)
 
