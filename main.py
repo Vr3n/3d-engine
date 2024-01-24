@@ -1,6 +1,7 @@
 import pygame as pg
 import moderngl as mgl
 import sys
+import models
 
 
 class GraphicsEngine:
@@ -31,6 +32,8 @@ class GraphicsEngine:
 		self.time = 0
 		self.delta_time = 0
 
+		self.scene = models.Triangle(self)
+
 	def check_events(self):
 		"""
 		Checking Keyboard or mouse eevnts.
@@ -38,11 +41,13 @@ class GraphicsEngine:
 
 		for event in pg.event.get():
 			if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+				self.scene.destroy()
 				pg.quit()
 				sys.exit()
 
 	def render(self):
 		self.ctx.clear(color=(0.08, 0.16, 0.18))
+		self.scene.render()
 
 		# swap the buffers.
 		pg.display.flip()
