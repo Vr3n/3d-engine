@@ -1,6 +1,7 @@
 import pygame as pg
 import moderngl as mgl
 import sys
+from mesh import Mesh
 import models
 import camera
 import light
@@ -21,7 +22,7 @@ class GraphicsEngine:
 
 		# mouse settings
 		pg.event.set_grab(True)
-		pg.mouse.set_visible(True)
+		pg.mouse.set_visible(False)
 
 		# detect and use existing opengl context.
 		self.ctx = mgl.create_context()
@@ -35,6 +36,7 @@ class GraphicsEngine:
 
 		self.light = light.Light()
 		self.camera = camera.Camera(self)
+		self.mesh = Mesh(self)
 		self.scene = models.Cube(self)
 
 	def check_events(self):
@@ -44,7 +46,7 @@ class GraphicsEngine:
 
 		for event in pg.event.get():
 			if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
-				self.scene.destroy()
+				self.mesh.destroy()
 				pg.quit()
 				sys.exit()
 
