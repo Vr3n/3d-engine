@@ -2,9 +2,9 @@ import pygame as pg
 import moderngl as mgl
 import sys
 from mesh import Mesh
-import models
 import camera
 import light
+from scene import Scene
 
 class GraphicsEngine:
 	def __init__(self, win_size=(1920, 1080)) -> None:
@@ -37,7 +37,7 @@ class GraphicsEngine:
 		self.light = light.Light()
 		self.camera = camera.Camera(self)
 		self.mesh = Mesh(self)
-		self.scene = models.Cube(self)
+		self.scene = Scene(self)
 
 	def check_events(self):
 		"""
