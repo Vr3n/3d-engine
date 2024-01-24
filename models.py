@@ -27,6 +27,7 @@ class Cube:
 		m_model = glm.rotate(self.m_model, self.app.time * 0.5, glm.vec3(0, 1, 0))
 		self.shader_program['m_model'].write(m_model)
 		self.shader_program['m_view'].write(self.app.camera.m_view)
+		self.shader_program['camPos'].write(self.app.camera.position)
 
 	def on_init(self):
 
@@ -34,6 +35,7 @@ class Cube:
 		self.shader_program['light.position'].write(self.app.light.position)
 		self.shader_program['light.Ia'].write(self.app.light.Ia)
 		self.shader_program['light.Id'].write(self.app.light.Id)
+		self.shader_program['light.Is'].write(self.app.light.Is)
 
 
 		# initialize texture
