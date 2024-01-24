@@ -71,3 +71,38 @@ class Cube(BaseModel):
 		self.program['light.Ia'].write(self.app.light.Ia)
 		self.program['light.Id'].write(self.app.light.Id)
 		self.program['light.Is'].write(self.app.light.Is)
+
+class Ironman(BaseModel):
+	"""
+	Displaying Cube
+	"""
+
+	def __init__(self, app, vao_name="ironman", tex_id='ironman', pos=(0, 0, 0), rot=(0, 0, 0), scale=(1, 1, 1)) -> None:
+		super().__init__(app, vao_name, tex_id, pos, rot, scale)
+		self.on_init()
+
+
+	def update(self):
+		self.texture.use()
+		self.program['m_model'].write(self.m_model)
+		self.program['m_view'].write(self.app.camera.m_view)
+		self.program['camPos'].write(self.app.camera.position)
+
+	def on_init(self):
+
+		# initialize texture
+		self.texture = self.app.mesh.texture.textures[self.tex_id]
+		self.program['u_texture_0'] = 0
+		self.texture.use()
+
+		# pass to shader programs.
+		self.program['m_proj'].write(self.app.camera.m_proj)
+		self.program['m_view'].write(self.app.camera.m_view)
+		self.program['m_model'].write(self.m_model)
+
+
+		# light
+		self.program['light.position'].write(self.app.light.position)
+		self.program['light.Ia'].write(self.app.light.Ia)
+		self.program['light.Id'].write(self.app.light.Id)
+		self.program['light.Is'].write(self.app.light.Is)

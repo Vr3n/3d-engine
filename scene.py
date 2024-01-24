@@ -13,10 +13,12 @@ class Scene:
 		app = self.app
 		add = self.add_object
 
-		n, s = 80, 2
-		for x in range(-n, n, s):
-			for z in range(-n, n, s):
-				add(Cube(app, pos=(x, -s, z)))
+		# n, s = 80, 2
+		# for x in range(-n, n, s):
+		# 	for z in range(-n, n, s):
+		# 		add(Cube(app, pos=(x, -s, z)))
+
+		add(Ironman(app, pos=(0, 0, 4)))
 
 
 	def render(self):

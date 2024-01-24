@@ -13,6 +13,12 @@ class VAO:
 			program=self.program.programs['default'],
 			vbo = self.vbo.vbos['cube']
 		)
+
+		# iron vao
+		self.vaos['ironman'] = self.get_vao(
+			program=self.program.programs['default'],
+			vbo = self.vbo.vbos['ironman']
+		)
 	
 	def get_vao(self, program, vbo):
 		vao = self.ctx.vertex_array(program, [(vbo.vbo, vbo.format, *vbo.attribs)])

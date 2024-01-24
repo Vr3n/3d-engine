@@ -9,6 +9,7 @@ class Texture:
 		self.textures[0] = self.get_texture(path="textures/drive.jpg")
 		self.textures[1] = self.get_texture(path="textures/bully.jpg")
 		self.textures[2] = self.get_texture(path="textures/andrew.jpg")
+		self.textures['ironman'] = self.get_texture(path="objs/IronMan/Face_04.png")
 
 
 	def get_texture(self, path:str):
