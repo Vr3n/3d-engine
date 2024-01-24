@@ -1,5 +1,5 @@
 import numpy as np
-
+import glm
 
 class Triangle:
 	"""
@@ -78,14 +78,26 @@ class Cube:
 		self.vbo = self.get_vbo()
 		self.shader_program = self.get_shader_program('default')
 		self.vao = self.get_vao()
+		self.m_model = self.get_model_matrix()
 		self.on_init()
+
+	def update(self):
+		m_model = glm.rotate(self.m_model, self.app.time, glm.vec3(0, 1, 0))
+		self.shader_program['m_model'].write(m_model)
 
 	def on_init(self):
 		self.shader_program['m_proj'].write(self.app.camera.m_proj)
 		self.shader_program['m_view'].write(self.app.camera.m_view)
+		self.shader_program['m_model'].write(self.m_model)
+
+
+	def get_model_matrix(self):
+		m_model = glm.mat4()
+		return m_model
 
 
 	def render(self):
+		self.update()
 		self.vao.render()
 
 	def destroy(self):
