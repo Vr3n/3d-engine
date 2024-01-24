@@ -29,6 +29,13 @@ class Cube:
 		self.shader_program['m_view'].write(self.app.camera.m_view)
 
 	def on_init(self):
+
+		# light
+		self.shader_program['light.position'].write(self.app.light.position)
+		self.shader_program['light.Ia'].write(self.app.light.Ia)
+		self.shader_program['light.Id'].write(self.app.light.Id)
+
+
 		# initialize texture
 		self.shader_program['u_texture_0'] = 0
 		self.texture.use()
@@ -54,7 +61,7 @@ class Cube:
 		self.vao.release()
 
 	def get_vao(self):
-		vao = self.ctx.vertex_array(self.shader_program, [(self.vbo, '2f 3f', 'in_texcoord_0', 'in_position')])
+		vao = self.ctx.vertex_array(self.shader_program, [(self.vbo, '2f 3f 3f', 'in_texcoord_0', 'in_normal', 'in_position')])
 		return vao
 
 
@@ -103,7 +110,21 @@ class Cube:
 		]
 
 		tex_coord_data = self.get_data(tex_coords, tex_cood_indices)
+
+		normals = [
+			(0, 0, 1) * 6,
+			(1, 0, 0) * 6,
+			(0, 0, -1) * 6,
+			(-1, 0, 0) * 6,
+			(0, 1, 0) * 6,
+			(0, -1, 0) * 6,
+		]
+
+		normals = np.array(normals, dtype="f4").reshape(36, 3)
+
+		vertex_data = np.hstack([normals, vertex_data])
 		vertex_data = np.hstack([tex_coord_data, vertex_data])
+
 		return vertex_data
 
 	@staticmethod
