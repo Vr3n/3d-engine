@@ -1,71 +1,6 @@
 import numpy as np
 import glm
-
-class Triangle:
-	"""
-	Displaying triangle
-	"""
-
-	def __init__(self, app) -> None:
-		self.app = app
-		self.ctx = app.ctx
-		self.vbo = self.get_vbo()
-		self.shader_program = self.get_shader_program('default')
-		self.vao = self.get_vao()
-
-
-	def render(self):
-		self.vao.render()
-
-	def destroy(self):
-		self.vbo.release()
-		self.shader_program.release()
-		self.vao.release()
-
-	def get_vao(self):
-		vao = self.ctx.vertex_array(self.shader_program, [(self.vbo, '3f', 'in_position')])
-		return vao
-
-
-	def get_vertex_data(self):
-		"""
-		Get the vertex points of the shape.
-
-		The opengl has right handled y axis.
-		"""
-		vertex_data =[
-			(-0.6, -0.8, 0.0),
-			(0.6, -0.8, 0.0),
-			(0.0, 0.8, 0.0),
-		]
-
-		vertex_data = np.array(vertex_data, dtype='f4')
-		return vertex_data
-
-	def get_vbo(self):
-		"""
-		Adding vertex data to vbo.
-
-		Vertex buffer object.
-		"""
-		vertex_data = self.get_vertex_data()
-		vbo = self.ctx.buffer(vertex_data)
-		return vbo
-
-
-	def get_shader_program(self, shader_name: str):
-		with open(f'shaders/{shader_name}.vert') as file:
-			vertex_shader = file.read()
-
-		with open(f'shaders/{shader_name}.frag') as file:
-			frag_shader = file.read()
-
-		prog = self.ctx.program(
-				vertex_shader=vertex_shader,
-				fragment_shader=frag_shader
-			)
-
-		return prog
+import pygame as pg
 
 class Cube:
 	"""
@@ -79,13 +14,25 @@ class Cube:
 		self.shader_program = self.get_shader_program('default')
 		self.vao = self.get_vao()
 		self.m_model = self.get_model_matrix()
+		self.texture = self.get_texture(tex_path="textures/drive.jpg")
 		self.on_init()
 
+	def get_texture(self, tex_path: str):
+		texture = pg.image.load(tex_path).convert()
+		texture = pg.transform.flip(texture, flip_x=False, flip_y=True)
+		texture = self.ctx.texture(size=texture.get_size(), components=3, data=pg.image.tostring(texture, 'RGB'))
+		return texture
+
 	def update(self):
-		m_model = glm.rotate(self.m_model, self.app.time, glm.vec3(0, 1, 0))
+		m_model = glm.rotate(self.m_model, self.app.time * 0.5, glm.vec3(0, 1, 0))
 		self.shader_program['m_model'].write(m_model)
 
 	def on_init(self):
+		# initialize texture
+		self.shader_program['u_texture_0'] = 0
+		self.texture.use()
+
+		# pass to shader programs.
 		self.shader_program['m_proj'].write(self.app.camera.m_proj)
 		self.shader_program['m_view'].write(self.app.camera.m_view)
 		self.shader_program['m_model'].write(self.m_model)
@@ -187,3 +134,70 @@ class Cube:
 			)
 
 		return prog
+
+class Triangle:
+	"""
+	Displaying triangle
+	"""
+
+	def __init__(self, app) -> None:
+		self.app = app
+		self.ctx = app.ctx
+		self.vbo = self.get_vbo()
+		self.shader_program = self.get_shader_program('default')
+		self.vao = self.get_vao()
+
+
+	def render(self):
+		self.vao.render()
+
+	def destroy(self):
+		self.vbo.release()
+		self.shader_program.release()
+		self.vao.release()
+
+	def get_vao(self):
+		vao = self.ctx.vertex_array(self.shader_program, [(self.vbo, '3f', 'in_position')])
+		return vao
+
+
+	def get_vertex_data(self):
+		"""
+		Get the vertex points of the shape.
+
+		The opengl has right handled y axis.
+		"""
+		vertex_data =[
+			(-0.6, -0.8, 0.0),
+			(0.6, -0.8, 0.0),
+			(0.0, 0.8, 0.0),
+		]
+
+		vertex_data = np.array(vertex_data, dtype='f4')
+		return vertex_data
+
+	def get_vbo(self):
+		"""
+		Adding vertex data to vbo.
+
+		Vertex buffer object.
+		"""
+		vertex_data = self.get_vertex_data()
+		vbo = self.ctx.buffer(vertex_data)
+		return vbo
+
+
+	def get_shader_program(self, shader_name: str):
+		with open(f'shaders/{shader_name}.vert') as file:
+			vertex_shader = file.read()
+
+		with open(f'shaders/{shader_name}.frag') as file:
+			frag_shader = file.read()
+
+		prog = self.ctx.program(
+				vertex_shader=vertex_shader,
+				fragment_shader=frag_shader
+			)
+
+		return prog
+
