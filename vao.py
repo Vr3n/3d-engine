@@ -19,6 +19,12 @@ class VAO:
 			program=self.program.programs['default'],
 			vbo = self.vbo.vbos['ironman']
 		)
+
+		# skybox vao
+		self.vaos['skybox'] = self.get_vao(
+			program=self.program.programs['skybox'],
+			vbo = self.vbo.vbos['skybox']
+		)
 	
 	def get_vao(self, program, vbo):
 		vao = self.ctx.vertex_array(program, [(vbo.vbo, vbo.format, *vbo.attribs)])
