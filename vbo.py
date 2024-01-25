@@ -12,6 +12,7 @@ class VBO:
 		self.vbos['cube'] = CubeVBO(ctx)
 		self.vbos['ironman'] = IronManVBO(ctx)
 		self.vbos['skybox'] = SkyboxVBO(ctx)
+		self.vbos['advanced_skybox'] = AdvancedSkyboxVBO(ctx)
 
 	def destroy(self):
 		[vbo.destroy() for vbo in self.vbos.values()]
@@ -32,6 +33,26 @@ class BaseVBO:
 
 	def destroy(self):
 		self.vbo.release()
+
+
+class AdvancedSkyboxVBO(BaseVBO):
+	def __init__(self, ctx) -> None:
+		super().__init__(ctx)
+		self.format = '3f'
+		self.attribs = ['in_position']
+
+
+	def get_vertex_data(self):
+		# in clip space.
+		z = 0.9999
+
+		vertices = [
+			(-1, -1, z), (3, 1, z), (-1, 3, z),
+		]
+
+		vertex_data = np.array(vertices, dtype='f4')
+
+		return vertex_data
 		
 class SkyboxVBO(BaseVBO):
 	def __init__(self, ctx) -> None:
